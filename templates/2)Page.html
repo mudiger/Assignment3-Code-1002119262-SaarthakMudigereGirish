@@ -13,9 +13,10 @@
         <input type="number" id="long" name="long">
         <input type="submit" value="Submit" placeholder="Submit"><br>
     </form>
-    <div style="width: 85%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">
-        <h2 style="text-align: center;color:rgb(99, 99, 99);">1000 random tuples</h2>
-    </div>
+    {% if time_query %}
+<!--    <div style="width: 85%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start;">-->
+<!--        <h2 style="text-align: center;color:rgb(99, 99, 99);">1000 random tuples</h2>-->
+<!--    </div>-->
 
     <div style="height: 50vh; width: 80%; display: flex; align-items: center; justify-content: center;">
         <label style="color:rgb(99, 99, 99);">Seconds  </label>
@@ -48,27 +49,19 @@
 		);
 
 	</script>
+    {% endif %}
+<div>
     {% if salpics %}
-            <h2>The earthquakes inside km radius are: </h2>
+            <h2>The earthquakes inside 100km radius are: </h2>
             <ul style="list-style-type:none">
                 {% for salpic in salpics %}
                 <table>
                     <tr>
                         <td>{{salpic[0]}}</td>
-                        <td>{{salpic[1]}}</td>
-                        <td>{{salpic[2]}}</td>
-                        <td>{{salpic[3]}}</td>
-                        <td>{{salpic[4]}}</td>
-                        <td>{{salpic[5]}}</td>
-                        <td>{{salpic[6]}}</td>
-                        <td>{{salpic[7]}}</td>
-                        <td>{{salpic[8]}}</td>
-                        <td>{{salpic[9]}}</td>
-                        <td>{{salpic[10]}}</td>
-                        <td>{{salpic[11]}}</td>
                     </tr>
                 </table>
                 {% endfor %}
             </ul>
         {% endif %}
+    </div>
 {% endblock %}
