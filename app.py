@@ -29,7 +29,7 @@ redis_password = 'My2SymFLIM78MdHnE61sCcWkM6G0HGWd6AzCaKwIZUU='
 
 # Redis client
 redis_client = redis.Redis(host=redis_host, port=redis_port, password=redis_password)
-
+redis_client.flushall()
 
 @app.route("/")
 def index():
@@ -70,13 +70,26 @@ def page2():
         lat = request.form['lat']
         long = request.form['long']
 
+        minlat = request.form['minlat']
+        maxlat = request.form['maxlat']
+        minlong = request.form['minlong']
+        maxlong = request.form['maxlong']
+
         for i in range(30):
             time_query.append(i + 1)
 
-        query = "SELECT place FROM dbo.all_month TABLESAMPLE(1000 ROWS) WHERE (6371 * ACOS(COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(latitude)))) <= 100; "
+        if lat!='':
+            query = "SELECT place FROM dbo.all_month TABLESAMPLE(1000 ROWS) WHERE (6371 * ACOS(COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(latitude)))) <= 100; "
+        else:
+            query = f"SELECT * FROM dbo.city WHERE lat BETWEEN ? AND ? AND lon BETWEEN ? AND ?"
+
+
         for i in time_query:
             start = time.time()
-            cursor.execute(query, lat, long, lat)
+            if lat!='':
+                cursor.execute(query, lat, long, lat)
+            else:
+                cursor.execute(query, minlat, maxlat, minlong, maxlong)
             end = time.time()
             diff = end - start
             query_time.append(diff)
@@ -114,7 +127,6 @@ def page3():
         e = time.time()
         redis_time.append(e - s)
 
-    print(query_time)
     return render_template("3)Page.html", query_time=query_time, time_query=time_query, redis_time=redis_time)
 
 
