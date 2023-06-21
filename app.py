@@ -29,7 +29,7 @@ redis_password = 'My2SymFLIM78MdHnE61sCcWkM6G0HGWd6AzCaKwIZUU='
 
 # Redis client
 redis_client = redis.Redis(host=redis_host, port=redis_port, password=redis_password)
-redis_client.flushall()
+#redis_client.flushall()
 
 @app.route("/")
 def index():
