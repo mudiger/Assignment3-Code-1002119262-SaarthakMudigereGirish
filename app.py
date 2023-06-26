@@ -61,8 +61,6 @@ def page1():
 
 @app.route("/page2/", methods=['GET', 'POST'])
 def page2():
-    lat = ""
-    long = ""
     query_time = []
     # salpics = []
     time_query = []
@@ -70,26 +68,13 @@ def page2():
         lat = request.form['lat']
         long = request.form['long']
 
-        minlat = request.form['minlat']
-        maxlat = request.form['maxlat']
-        minlong = request.form['minlong']
-        maxlong = request.form['maxlong']
-
         for i in range(30):
             time_query.append(i + 1)
 
-        if lat!='':
-            query = "SELECT place FROM dbo.all_month TABLESAMPLE(1000 ROWS) WHERE (6371 * ACOS(COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(latitude)))) <= 100; "
-        else:
-            query = f"SELECT * FROM dbo.city WHERE lat BETWEEN ? AND ? AND lon BETWEEN ? AND ?"
-
-
+        query = "SELECT place FROM dbo.all_month TABLESAMPLE(1000 ROWS) WHERE (6371 * ACOS(COS(RADIANS(?)) * COS(RADIANS(latitude)) * COS(RADIANS(longitude) - RADIANS(?)) + SIN(RADIANS(?)) * SIN(RADIANS(latitude)))) <= 100; "
         for i in time_query:
             start = time.time()
-            if lat!='':
-                cursor.execute(query, lat, long, lat)
-            else:
-                cursor.execute(query, minlat, maxlat, minlong, maxlong)
+            cursor.execute(query, lat, long, lat)
             end = time.time()
             diff = end - start
             query_time.append(diff)
